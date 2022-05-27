@@ -111,7 +111,9 @@ object MainController {
         override fun windowDeactivated(e: WindowEvent?) {}
     }
 
-    // CheckboxListener listens to checkbox state change then updates the status field
+    /* CheckboxListener listens to checkbox state change then updates the status field.
+    *  This will also update the progress of the to-do
+    * */
     class CheckboxListener : ItemListener {
         override fun itemStateChanged(e: ItemEvent) {
             val source = e.source as JCheckBox
@@ -132,7 +134,7 @@ object MainController {
     class ButtonListener : ActionListener {
         override fun actionPerformed(e: ActionEvent) {
             when {
-                // Deletes a task in the database and the view
+                // Deletes a task in the database and the view. updates progress
                 e.actionCommand.startsWith("tv") -> {
                     task.delete(e.actionCommand.slice(2 until e.actionCommand.length))
                     todo.updateField(currentId, "progress", task.computeProgress(currentId, tViewComponentList).toString())
@@ -180,7 +182,7 @@ object MainController {
                         JOptionPane.showMessageDialog(parent, "Please complete the form", "Incomplete form", JOptionPane.ERROR_MESSAGE)
                     }
                 }
-                // Validates the form and inserts data to the database and updates the view
+                // Validates the form and inserts data to the database and updates the view. updates progress
                 e.actionCommand == "tConfirm" -> {
                     if(validateForm(e.actionCommand)) {
                         FormWindow.isVisible = false
