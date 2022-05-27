@@ -4,6 +4,7 @@ import FormWindow
 import MainWindow
 import model.Task
 import model.Todo
+import util.DatabaseUtil
 import view.component.MainToDoCard
 import view.component.TaskCard
 import view.view.MainFormView
@@ -34,11 +35,13 @@ object MainController {
 
     private val btnListener = ButtonListener()
     private val checkListener = CheckboxListener()
+    private val windowListener = MainWindowListener()
 
     private var currentId = ""
 
     // The init block initializes the property of the object or class
     init {
+        parent.addWindowListener(windowListener)
         parent.changeView(mView)
         mainViewOnLoad()
         mView.addBtn.addActionListener(btnListener)
@@ -94,6 +97,20 @@ object MainController {
         return true
     }
 
+    // Listens to windows event. close database connection when window is closed using the close button
+    class MainWindowListener : WindowListener {
+        override fun windowClosing(e: WindowEvent?) {
+            DatabaseUtil.closeConnection()
+        }
+
+        override fun windowOpened(e: WindowEvent?) {}
+        override fun windowClosed(e: WindowEvent?) {}
+        override fun windowIconified(e: WindowEvent?) {}
+        override fun windowDeiconified(e: WindowEvent?) {}
+        override fun windowActivated(e: WindowEvent?) {}
+        override fun windowDeactivated(e: WindowEvent?) {}
+    }
+
     // CheckboxListener listens to checkbox state change then updates the status field
     class CheckboxListener : ItemListener {
         override fun itemStateChanged(e: ItemEvent) {
@@ -133,7 +150,6 @@ object MainController {
                 }
                 // Shows the edit form
                 e.actionCommand.startsWith("mve") -> {
-                    println(e.actionCommand)
                     FormWindow
                     fView.confirm.actionCommand = "mvConfirm"
                     FormWindow.changeView(fView)
@@ -141,7 +157,6 @@ object MainController {
                 }
                 // Validates the form and inserts data to the database and updates the view
                 e.actionCommand == "mConfirm" -> {
-                    println(e.actionCommand)
                     if(validateForm(e.actionCommand)) {
                         FormWindow.isVisible = false
                         todo.insert(currentId, fView.titleField.text, fView.startDate.text, fView.dueDate.text)
@@ -154,7 +169,6 @@ object MainController {
                 }
                 // Validates the form and updates the database and view
                 e.actionCommand == "mvConfirm" -> {
-                    println(e.actionCommand)
                     if(validateForm(e.actionCommand)) {
                         FormWindow.isVisible = false
                         todo.update(currentId, fView.titleField.text, fView.startDate.text, fView.dueDate.text)
@@ -167,7 +181,6 @@ object MainController {
                 }
                 // Validates the form and inserts data to the database and updates the view
                 e.actionCommand == "tConfirm" -> {
-                    println(e.actionCommand)
                     if(validateForm(e.actionCommand)) {
                         FormWindow.isVisible = false
                         task.insert(currentId,  tfView.titleField.text)
@@ -181,7 +194,6 @@ object MainController {
                 // Shows the add project/to-do form
                 e.actionCommand == "mAdd" -> {
                     fView.confirm.actionCommand = "mConfirm"
-                    println(e.actionCommand)
                     FormWindow
                     FormWindow.changeView(fView)
                     FormWindow.isVisible = true
@@ -189,7 +201,6 @@ object MainController {
                 // Shows the add project/to-do form
                 e.actionCommand =="tAdd" -> {
                     fView.confirm.actionCommand = "tConfirm"
-                    println(e.actionCommand)
                     FormWindow
                     FormWindow.changeView(tfView)
                     FormWindow.isVisible = true
