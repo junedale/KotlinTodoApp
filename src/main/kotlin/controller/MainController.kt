@@ -81,8 +81,8 @@ object MainController {
             tView.addComponent(spacerList.last())
         }
         tView.validateView()
-        tView.taskDetailCard.ongoing.text = task.ongoing.toString()
         task.computeProgress(currentId, tViewComponentList)
+        tView.taskDetailCard.ongoing.text = task.ongoing.toString()
     }
 
     // Function validateForm performs basic form validation
@@ -117,11 +117,13 @@ object MainController {
             val source = e.source as JCheckBox
             if(e.stateChange == ItemEvent.SELECTED) {
                 task.updateField(source.actionCommand, "status", "1")
+                todo.updateField(currentId, "progress", task.computeProgress(currentId, tViewComponentList).toString())
+                tView.taskDetailCard.ongoing.text = task.ongoing.toString()
             } else {
                 task.updateField(source.actionCommand, "status", "0")
+                todo.updateField(currentId, "progress", task.computeProgress(currentId, tViewComponentList).toString())
+                tView.taskDetailCard.ongoing.text = task.ongoing.toString()
             }
-            todo.updateField(currentId, "progress", task.computeProgress(currentId, tViewComponentList).toString())
-            tView.taskDetailCard.ongoing.text = task.ongoing.toString()
             tView.reloadView()
             tViewComponentList.clear()
             taskViewOnLoad(currentId)
