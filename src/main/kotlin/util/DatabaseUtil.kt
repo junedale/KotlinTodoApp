@@ -10,7 +10,9 @@ object DatabaseUtil {
     private var username = "root"
     private var password = ""
 
-    fun connect() {
+    // Function connect is a static method used to connect to the database
+    @JvmStatic
+    fun connect(): Connection? {
         val props = Properties()
         props["user"] = username
         props["passwrod"] = password
@@ -23,10 +25,12 @@ object DatabaseUtil {
         } catch (e: ClassNotFoundException) {
             e.printStackTrace()
         }
+        return connection
     }
 
-
+    // Function closeConnection terminates the connection to database
+    @JvmStatic
     fun closeConnection() {
-        connection?.close()!!
+        connect()?.close()
     }
 }

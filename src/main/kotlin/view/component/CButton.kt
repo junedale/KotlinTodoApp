@@ -7,6 +7,8 @@ import java.awt.RenderingHints
 import javax.swing.JButton
 
 class CButton : JButton() {
+
+    // This block sets the initial look of the button
     init {
         isFocusable = false
         isFocusPainted = false
@@ -17,6 +19,8 @@ class CButton : JButton() {
         size.height = kotlin.math.max(size.width, size.height)
         size.width = size.height
     }
+
+    // This method changes the fill color and shape of the button
 
     override fun paintComponent(g: Graphics) {
         val g2D = g as Graphics2D
@@ -30,6 +34,7 @@ class CButton : JButton() {
         super.paintComponent(g)
     }
 
+    // This method changes the outline color and shape of the button
     override fun paintBorder(g: Graphics) {
         val g2D = g as Graphics2D
         g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)

@@ -1,6 +1,7 @@
 package view.view
 
 import util.Constant
+import view.base.ViewInterface
 import view.component.CButton
 import view.component.SubToDoCard
 import java.awt.Color
@@ -9,38 +10,39 @@ import java.awt.FlowLayout
 import javax.swing.*
 import javax.swing.border.EmptyBorder
 
-object TaskView : JPanel() {
-    val scrollContentContainer: JPanel
+object TaskView : JPanel(), ViewInterface {
+    override val scrollContentContainer: JPanel
+    override val scrollPane: JScrollPane
     val addBtn: JButton
     val backBtn: JButton
-    val scrollPane: JScrollPane
+    val taskDetailCard: SubToDoCard
     private val spring = SpringLayout()
 
+
+    // The init block initializes the property of the object or class
     init {
         layout = spring
-        maximumSize = Dimension(Int.MAX_VALUE, Int.MAX_VALUE)
+        setBounds(0, 0, 400, 600)
         scrollContentContainer = JPanel()
         scrollPane = JScrollPane(scrollContentContainer,
             JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
             JScrollPane.HORIZONTAL_SCROLLBAR_NEVER)
+        taskDetailCard = SubToDoCard()
         addBtn = CButton()
         backBtn = CButton()
-
         initUI()
     }
 
+    // function initUI initializes the position of controls and add them to the panel
     private fun initUI() {
-        val taskDetailCard = SubToDoCard()
-        taskDetailCard.progress.value = 20
-        taskDetailCard.total.text = "${taskDetailCard.progress.value} %"
         spring.putConstraint(SpringLayout.WEST, taskDetailCard, 10, SpringLayout.WEST, this)
-        spring.putConstraint(SpringLayout.NORTH, taskDetailCard, 50, SpringLayout.NORTH, this)
+        spring.putConstraint(SpringLayout.NORTH, taskDetailCard, 10, SpringLayout.NORTH, this)
         add(taskDetailCard)
 
         val container = JPanel()
         container.layout = FlowLayout(FlowLayout.CENTER, 0, 8)
         container.background = Color.white
-        container.preferredSize = Dimension(380, 300)
+        container.preferredSize = Dimension(360, 300)
         spring.putConstraint(SpringLayout.WEST, container, 10, SpringLayout.WEST, this)
         spring.putConstraint(SpringLayout.NORTH, container, 190, SpringLayout.NORTH, taskDetailCard)
         add(container)
@@ -54,16 +56,16 @@ object TaskView : JPanel() {
         scrollContentContainer.layout = BoxLayout(scrollContentContainer, BoxLayout.Y_AXIS)
         scrollContentContainer.background = Color.WHITE
 
-        scrollPane.preferredSize = Dimension(380, 260)
+        scrollPane.preferredSize = Dimension(360, 260)
         scrollPane.border = BorderFactory.createEmptyBorder()
         container.add(scrollPane)
 
         addBtn.text = "Add Task"
         addBtn.foreground = Color.WHITE
         addBtn.preferredSize = Dimension(120, 30)
-        addBtn.actionCommand = "add"
-        spring.putConstraint(SpringLayout.EAST, addBtn, -10, SpringLayout.EAST, this)
-        spring.putConstraint(SpringLayout.SOUTH, addBtn, -10, SpringLayout.SOUTH, this)
+        addBtn.actionCommand = "tAdd"
+        spring.putConstraint(SpringLayout.EAST, addBtn, -30, SpringLayout.EAST, this)
+        spring.putConstraint(SpringLayout.SOUTH, addBtn, -50, SpringLayout.SOUTH, this)
         add(addBtn)
 
         backBtn.text = "Return"
@@ -71,7 +73,8 @@ object TaskView : JPanel() {
         backBtn.preferredSize = Dimension(120, 30)
         backBtn.actionCommand = "return"
         spring.putConstraint(SpringLayout.WEST, backBtn, 10, SpringLayout.WEST, this)
-        spring.putConstraint(SpringLayout.SOUTH, backBtn, -10, SpringLayout.SOUTH, this)
+        spring.putConstraint(SpringLayout.SOUTH, backBtn, -50, SpringLayout.SOUTH, this)
         add(backBtn)
     }
+
 }
