@@ -117,13 +117,11 @@ object MainController {
             val source = e.source as JCheckBox
             if(e.stateChange == ItemEvent.SELECTED) {
                 task.updateField(source.actionCommand, "status", "1")
-                todo.updateField(currentId, "progress", task.computeProgress(currentId, tViewComponentList).toString())
-                tView.taskDetailCard.ongoing.text = task.ongoing.toString()
             } else {
                 task.updateField(source.actionCommand, "status", "0")
-                todo.updateField(currentId, "progress", task.computeProgress(currentId, tViewComponentList).toString())
-                tView.taskDetailCard.ongoing.text = task.ongoing.toString()
             }
+            todo.updateField(currentId, "progress", task.computeProgress(currentId, tViewComponentList).toString())
+            tView.taskDetailCard.ongoing.text = task.ongoing.toString()
             tView.reloadView()
             tViewComponentList.clear()
             taskViewOnLoad(currentId)
@@ -137,7 +135,7 @@ object MainController {
                 // Deletes a task in the database and the view
                 e.actionCommand.startsWith("tv") -> {
                     task.delete(e.actionCommand.slice(2 until e.actionCommand.length))
-
+                    todo.updateField(currentId, "progress", task.computeProgress(currentId, tViewComponentList).toString())
                     tView.reloadView()
                     clearList()
                     taskViewOnLoad(currentId)
@@ -187,6 +185,7 @@ object MainController {
                     if(validateForm(e.actionCommand)) {
                         FormWindow.isVisible = false
                         task.insert(currentId,  tfView.titleField.text)
+                        todo.updateField(currentId, "progress", task.computeProgress(currentId, tViewComponentList).toString())
                         tView.reloadView()
                         clearList()
                         taskViewOnLoad(currentId)
