@@ -81,8 +81,8 @@ object MainController {
             tView.addComponent(spacerList.last())
         }
         tView.validateView()
-        task.computeProgress(currentId, tViewComponentList)
         tView.taskDetailCard.ongoing.text = task.ongoing.toString()
+        task.computeProgress(currentId, tViewComponentList)
     }
 
     // Function validateForm performs basic form validation
@@ -132,14 +132,15 @@ object MainController {
     class ButtonListener : ActionListener {
         override fun actionPerformed(e: ActionEvent) {
             when {
-                // Deletes a task to the database and the view
+                // Deletes a task in the database and the view
                 e.actionCommand.startsWith("tv") -> {
                     task.delete(e.actionCommand.slice(2 until e.actionCommand.length))
+
                     tView.reloadView()
                     clearList()
                     taskViewOnLoad(currentId)
                 }
-                // Deletes a task to the database and the view
+                // Deletes a task in the database and the view
                 e.actionCommand.startsWith("mvd") -> {
                     todo.delete(e.actionCommand.slice(3 until e.actionCommand.length))
                     clearList()
